@@ -1,0 +1,125 @@
+<%- model_class = Report -%> 
+<div class="page-header">
+  <h3><%=t '.title', :default => model_class.model_name.human.pluralize.titleize %></h3>
+</div>
+<table class="table table-striped table-condensed table-bordered table-hover">
+  <thead>
+    <tr>
+      <!--th><%= model_class.human_attribute_name(:id) %></th-->
+      <th><%= model_class.human_attribute_name(:order_id) %></th>
+      <th>Customer</th>      
+      <th>Price</th>
+      <th><%= model_class.human_attribute_name(:status) %></th>      
+      <th><%= model_class.human_attribute_name(:payment) %></th>
+      <th><%= model_class.human_attribute_name(:descriptor) %></th>
+      <th><%= model_class.human_attribute_name(:tracking_number) %></th>
+      <th><%= model_class.human_attribute_name(:delivery) %></th>      
+      <th><%= model_class.human_attribute_name(:commission) %></th>
+      <th><%= model_class.human_attribute_name(:settled) %></th>     
+      <% if is_current_admin? %>
+      <th><%= model_class.human_attribute_name(:id_user) %></th>
+      <th><%= model_class.human_attribute_name(:created_at) %></th>      
+      <th><%=t '.actions', :default => t("helpers.actions") %></th>
+      <% end %>
+    </tr>
+  </thead>
+  <tbody>
+    <% @reports.each do |report| %>
+      <tr>
+        <!--td><%= link_to report.id, report_path(report) %></td-->
+        <td>MRX-12<%= report.order_id %></td>
+        <td><%= report.order.firts_name.titleize %> <%= report.order.last_name.titleize %></td>        
+        <td>$<%= report.order.price %></td>
+        <td>
+          <% case report.status %>
+              <% when 1 then %>
+                  <span class="label label-warning">New</span>
+              <% when 2 then %>
+                  <span class="label label-info">Verified</span>
+              <% when 3 then %>
+                  <span class="label label-success">Approved</span>
+              <% when 4 then %>
+                  <span class="label label-danger">Declined</span>
+              <% when 5 then %>
+                  <span class="label label-primary">Refund</span>
+              <% when 6 then %>
+                  <span class="label label-danger">Chargeback</span>
+              <% when 7 then %>
+                  <span class="label label-danger">Cancelled</span>
+          <% end %>
+        </td>
+        <td>
+          <% case report.payment %>
+              <% when 1 then %>
+                  <img src="/assets/images/icons/cc/visa.png" alt="Visa" />
+              <% when 2 then %>
+                  <!--span class="label label-default">Mastercard</span-->
+                  <img src="/assets/images/mastercard.png" alt="Mastercard" />
+              <% when 3 then %>
+                  <span class="label label-default">American Express</span>
+              <% when 4 then %>
+                  <span class="label label-default">Discover</span>
+              <% when 5 then %>
+                  <span class="label label-default">Paypal</span>
+              <% when 6 then %>
+                  <span class="label label-default">Money Order</span>
+              <% when 7 then %>
+                  <span class="label label-success">Bitcoin</span>
+          <% end %>
+        </td>        
+        <td>
+          <% case report.descriptor %>
+              <% when '1' then %>
+                  <span class="label label-default">OCEAN8</span>
+              <% when '2' then %>
+                  <span class="label label-default">SOFTHUBWEB 855.260.8641</span>                  
+              <% when '3' then %>
+                  <span class="label label-default">SIGNALDRIVE SPECS</span>
+              <% when '4' then %>
+                  <span class="label label-default">EASTERNWESTERNWELLNESS</span>
+              <% when '5' then %>
+                  <span class="label label-default">PAYPAL</span>                                    
+          <% end %>
+        </td>
+        <td><%= report.tracking_number %></td>
+        <td>
+          <% case report.delivery %>
+              <% when 1 then %>
+                  <span class="label label-danger">Pre-Shipment</span>
+              <% when 2 then %>
+                  <span class="label label-warning">In Transit</span>
+              <% when 3 then %>
+                  <span class="label label-success">Delivered</span>
+          <% end %>
+        </td>        
+        <td>$<%= report.commission %></td>
+        <td>
+          <% case report.settled %>
+              <% when 1 then %>
+                  <span class="label label-danger">No</span>
+              <% when 2 then %>
+                  <span class="label label-success">Yes</span>
+          <% end %>
+        </td>        
+        <% if is_current_admin? %>
+        <td><%= report.id_user %>-<%= report.order.user.username %></td>        
+        <td><%=l report.created_at %></td>        
+        <td>
+          <%= link_to t('.edit', :default => t("helpers.links.edit")),
+                      edit_report_path(report), :class => 'btn btn-xs btn-info' %>
+          <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+                      report_path(report),
+                      :method => :delete,
+                      :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+                      :class => 'btn btn-xs btn-danger' %>
+        </td>
+        <% end %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<% if is_current_admin? %>
+<%= link_to t('.new', :default => t("helpers.links.new")),
+            new_report_path,
+            :class => 'btn btn-primary' %>
+<% end %>

@@ -1,0 +1,84 @@
+<%- model_class = Order -%>
+
+<div class="page-header">
+  <h2><%=t '.title', :default => model_class.model_name.human.pluralize.titleize %></h2>
+</div>
+<!--div class="container table-responsive"-->
+
+  <table class="table table-striped table-condensed table-bordered table-hover table-hover table-checkable table-colvis datatable">
+    <thead>
+      <tr>
+        <th>Order ID</th>
+        <th>Customer</th>
+        <th>Phone</th>
+        <th>E-mail</th>
+        <!--th>Address</th>
+        <th>City</th>
+        <th>State</th>
+        <th>Zip</th-->
+        <th>Country</th>
+        <!--th>DOB</th>
+        <th>Card Number</th>
+        <th>CVV</th>
+        <th>Exp. Date</th-->
+        <th>Product</th>
+        <th>Price</th>
+        <th>Shipping</th>
+        <% if is_current_admin? %>
+            <th><%= model_class.human_attribute_name(:user_id) %></th>
+        <% end %>
+        <th>Date</th>
+        <% if is_current_admin? %>
+        <th><%=t '.actions', :default => t("helpers.actions") %></th>
+        <% end %>
+      </tr>
+    </thead>
+    <tbody>
+      <% @orders.each do |order| %>
+        <tr>
+          <td>MRX-12<%= link_to order.id, order_path(order) %></td>
+          <td><%= order.firts_name.titleize %> <%= order.last_name.titleize %></td>
+          <td><%= order.phone %></td>
+          <td><%= order.email %></td>
+          <!--td><%= order.address.titleize %></td>          
+          <td><%= order.city.titleize %></td>
+          <td><%= order.state.upcase %></td>
+          <td><%= order.zip %></td-->
+          <td><%= order.country.upcase %></td>
+          <!--td><%= order.dob %></td>
+          <td><%= order.cc %></td>
+          <td><%= order.cvv %></td>
+          <td><%= order.exp_year %>/<%= order.exp_month %></td-->
+          <td><%= order.product.titleize %> x <%= order.qty %></td>
+          <td>$<%= order.price %></td>
+
+          <% case order.shipping_type %>
+            <% when 1 then %>
+              <td><span class="label label-warning">India</span></td>
+            <% when 2 then %>
+              <td><span class="label label-primary">USA</span></td>              
+          <% end %>
+          <% if is_current_admin? %>
+            <td><%= order.user.username %></td>
+          <% end %>
+          <td><%=l order.created_at %></td>
+          <% if is_current_admin? %>
+          <td>
+            <%= link_to t('.edit', :default => t("helpers.links.edit")),
+                        edit_order_path(order), :class => 'btn btn-xs btn-info' %>
+            <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+                        order_path(order),
+                        :method => :delete,
+                        :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure you want to delete this order?')) },
+                        :class => 'btn btn-xs btn-danger' %>
+          </td>
+          <% end %>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<!--/div-->
+
+<%= link_to t('.new', :default => t("helpers.links.new")),
+            new_order_path,
+            :class => 'btn btn-primary' %>

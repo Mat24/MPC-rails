@@ -1,0 +1,105 @@
+<%- model_class = Report -%>
+<div class="page-header">
+  <h1><%=t '.title', :default => model_class.model_name.human.titleize %></h1>
+</div>
+
+<dl class="dl-horizontal">
+  <dt><strong><%= model_class.human_attribute_name(:status) %>:</strong></dt>
+  <dd>
+    <% case @report.status %>
+        <% when 1 then %>
+            <span class="label label-default">New</span>
+        <% when 2 then %>
+            <span class="label label-primary">Verified</span>
+        <% when 3 then %>
+            <span class="label label-success">Approved</span>
+        <% when 4 then %>
+            <span class="label label-danger">Declined</span>
+        <% when 5 then %>
+            <span class="label label-info">Refund</span>
+        <% when 6 then %>
+            <span class="label label-default">Chargeback</span>
+        <% when 7 then %>
+            <span class="label label-danger">Cancelled</span>
+    <% end %>
+  </dd>
+  <dt><strong><%= model_class.human_attribute_name(:descriptor) %>:</strong></dt>
+  <dd>
+    <% case @report.descriptor %>
+              <% when '1' then %>
+                  <span class="label label-default">OCEAN8</span>
+              <% when '2' then %>
+                  <span class="label label-default">SOFTHUBWEB 855.260.8641</span>                  
+              <% when '3' then %>
+                  <span class="label label-default">SIGNALDRIVE SPECS</span>
+              <% when '4' then %>
+                  <span class="label label-default">EASTERNWESTERNWELLNESS</span>
+              <% when '5' then %>
+                  <span class="label label-default">PAYPAL</span>   
+    <% end %>
+  </dd>
+  <dt><strong><%= model_class.human_attribute_name(:payment) %>:</strong></dt>
+  <dd>
+    <% case @report.payment %>
+        <% when 1 then %>
+            <span class="label label-default">Visa</span>
+        <% when 2 then %>
+            <span class="label label-default">Mastercard</span>
+        <% when 3 then %>
+            <span class="label label-default">American Express</span>
+        <% when 4 then %>
+            <span class="label label-default">Discover</span>
+        <% when 5 then %>
+            <span class="label label-default">Paypal</span>
+        <% when 6 then %>
+            <span class="label label-default">Money Order</span>
+        <% when 7 then %>
+            <span class="label label-success">Bitcoin</span>
+    <% end %>
+  </dd>
+  <dt><strong><%= model_class.human_attribute_name(:delivery) %>:</strong></dt>
+  <dd>
+    <% case @report.delivery %>
+        <% when 1 then %>
+            <span class="label label-warning">Pre-Shipment</span>
+        <% when 2 then %>
+            <span class="label label-info">In Transit</span>
+        <% when 3 then %>
+            <span class="label label-success">Delivered</span>
+    <% end %>
+  </dd>
+  <dt><strong><%= model_class.human_attribute_name(:settled) %>:</strong></dt>
+  <dd>
+    <% case @report.settled %>
+        <% when 1 then %>
+            <span class="label label-info">No</span>
+        <% when 2 then %>
+            <span class="label label-info">Yes</span>
+    <% end %>
+  </dd>
+  <dt><strong><%= model_class.human_attribute_name(:commission) %>:</strong></dt>
+  <dd><%= @report.commission %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:tracking_number) %>:</strong></dt>
+  <dd><%= @report.tracking_number %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:order_id) %>:</strong></dt>
+  <dd><%= @report.order_id %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:id_user) %>:</strong></dt>
+  <dd><%= @report.id_user %></dd>
+</dl>
+
+<div class="form-actions">
+  <%= link_to t('.back', :default => t("helpers.links.back")),
+              reports_path, :class => 'btn'  %>
+  <% if is_current_admin? %>
+  <%= link_to t('.new', :default => t("helpers.links.new")),
+            new_report_path,
+            :class => 'btn btn-primary' %>
+  <%= link_to t('.edit', :default => t("helpers.links.edit")),
+              edit_report_path(@report), :class => 'btn' %>
+  <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+              report_path(@report),
+              :method => 'delete',
+              :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+              :class => 'btn btn-danger' %>
+  <% end %>
+</div>
