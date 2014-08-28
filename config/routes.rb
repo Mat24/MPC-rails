@@ -1,8 +1,6 @@
 Rails.application.routes.draw do
   get 'terms/index'
 
-  get 'flatuipro_demo/index'
-
   get 'faq/index'
 
   get 'news/index'
